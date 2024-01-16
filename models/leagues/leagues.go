@@ -1,6 +1,9 @@
 package leagues
 
 import (
+	"bytes"
+	"errors"
+
 	"example.com/football-project/db"
 	"example.com/football-project/models/global"
 	"example.com/football-project/queries"
@@ -11,6 +14,11 @@ type League struct {
 	Name          string               `json:"league_name"`
 	Country       global.Country       `json:"country"`
 	Confederation global.Confederation `json:"confederation"`
+}
+
+type Search struct {
+	Country       int64 `json:"country_id"`
+	Confederation int64 `json:"confederation_id"`
 }
 
 func (l *League) AddLeague() error {
@@ -28,8 +36,30 @@ func (l *League) AddLeague() error {
 	return err
 }
 
-func GetLeaguesByCountry(id int64) ([]League, error) {
-	rows, err := db.DB.Query(queries.FIND_LEAGUES_BY_COUNTRY_ID, id)
+func (search *Search) GetLeagues() ([]League, error) {
+	var query bytes.Buffer
+	query.WriteString(queries.FIND_LEAGUES_BASE_QUERY)
+	var params []interface{}
+	if *search != (Search{}) {
+		query.WriteString(queries.WHERE)
+		switch {
+		case search.Country != 0 && search.Confederation != 0:
+			query.WriteString(queries.COUNTRY_AND_CONFEDERATION_CLAUSE)
+			params = append(params, search.Country, search.Confederation)
+		case search.Country == 0 && search.Confederation != 0:
+			query.WriteString(queries.CONFEDERATION_CLAUSE)
+			params = append(params, search.Confederation)
+		case search.Country != 0 && search.Confederation == 0:
+			query.WriteString(queries.COUNTRY_CLAUSE)
+			params = append(params, search.Country)
+		default:
+			return nil, errors.New("Search criteria is invalid")
+		}
+	} else {
+		return nil, errors.New("Search criteria is invalid")
+	}
+
+	rows, err := db.DB.Query(query.String(), params...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +75,9 @@ func GetLeaguesByCountry(id int64) ([]League, error) {
 			return nil, err
 		}
 		data = append(data, league)
+	}
+	if data == nil {
+		return []League{}, nil
 	}
 	return data, nil
 }

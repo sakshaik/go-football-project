@@ -1,6 +1,8 @@
 package queries
 
 const (
+	WHERE = " where "
+
 	GET_ALL_CITIES = `
 		select 
 			c.city_id, c.city_name, 

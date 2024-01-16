@@ -16,7 +16,7 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/player", addPlayer)
 	server.GET("/player/:playerId", findPlayerbyID)
 	server.POST("/league", addLeague)
-	server.GET("/league", searchLeagues)
+	server.POST("/search/league", searchLeagues)
 }
 
 func defaultMessage(context *gin.Context) {

@@ -1,9 +1,7 @@
 package routes
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"example.com/football-project/models/leagues"
 	"github.com/gin-gonic/gin"
@@ -25,22 +23,16 @@ func addLeague(context *gin.Context) {
 }
 
 func searchLeagues(context *gin.Context) {
-	params := context.Request.URL.Query()
-	for key, value := range params {
-		if key == "countryId" {
-			countryId, err := strconv.ParseInt(value[0], 10, 64)
-			if err != nil {
-				context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse country id parameter"})
-				return
-			}
-			data, err := leagues.GetLeaguesByCountry(countryId)
-			if err != nil {
-				fmt.Println(err)
-				context.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting league data by country ID"})
-				return
-			}
-			context.JSON(http.StatusOK, data)
-			break
-		}
+	var search leagues.Search
+	err := context.ShouldBindJSON(&search)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse sent request."})
+		return
 	}
+	data, err := search.GetLeagues()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	context.JSON(http.StatusOK, data)
 }

@@ -6,7 +6,7 @@ const (
 		values (?, ?, ?)
 	`
 
-	FIND_LEAGUES_BY_COUNTRY_ID = `
+	FIND_LEAGUES_BASE_QUERY = `
 		select l.league_id, l.league_name,
 			c.country_id, c.country_name,
 			c1.continent_id, c1.continent_name,
@@ -17,6 +17,18 @@ const (
 			inner join confederation cf on cf.continent_id = c.continent_id
 			inner join continent c1 on c1.continent_id = c.continent_id
 			inner join continent c2 on c2.continent_id = cf.continent_id
-		where l.country_id = ?
+	`
+	DEFAULT_SEARCH_CLAUSE = `
+		l.country_id = 0
+	`
+
+	COUNTRY_AND_CONFEDERATION_CLAUSE = `
+		c.country_id = ? and cf.confederation_id = ?
+	`
+	COUNTRY_CLAUSE = `
+		c.country_id = ?
+	`
+	CONFEDERATION_CLAUSE = `
+		cf.confederation_id = ?
 	`
 )
