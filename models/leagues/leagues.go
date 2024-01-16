@@ -38,7 +38,9 @@ func GetLeaguesByCountry(id int64) ([]League, error) {
 	for rows.Next() {
 		var league League
 		err := rows.Scan(&league.ID, &league.Name,
-			&league.Country.ID, &league.Country.Name, &league.Confederation.ID, &league.Confederation.Name)
+			&league.Country.ID, &league.Country.Name, &league.Country.Continent.ID, &league.Country.Continent.Name,
+			&league.Confederation.ID, &league.Confederation.Name,
+			&league.Confederation.Continent.ID, &league.Confederation.Continent.Name)
 		if err != nil {
 			return nil, err
 		}

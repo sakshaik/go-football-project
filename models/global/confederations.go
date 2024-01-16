@@ -9,7 +9,7 @@ type Confederation struct {
 	ID          int64     `json:"confederation_id"`
 	Name        string    `json:"confederation_name"`
 	Description string    `json:"description"`
-	Continent   Continent `json:"continent,omitempty"`
+	Continent   Continent `json:"continent"`
 }
 
 func GetAllConfederations() ([]Confederation, error) {

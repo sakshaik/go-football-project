@@ -11,7 +11,7 @@ import (
 type Country struct {
 	ID        int64     `json:"country_id"`
 	Name      string    `json:"country_name"`
-	Continent Continent `json:"continent,omitempty"`
+	Continent Continent `json:"continent"`
 }
 
 func GetAllCountries() ([]Country, error) {

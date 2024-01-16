@@ -18,7 +18,7 @@ func addLeague(context *gin.Context) {
 	}
 	err = league.AddLeague()
 	if err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error adding a new player."})
+		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error adding a new league."})
 		return
 	}
 	context.JSON(http.StatusCreated, gin.H{"message": "League added successfully."})
