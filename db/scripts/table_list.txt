@@ -1,0 +1,6 @@
+continent
+country
+city
+confederation
+player
+league

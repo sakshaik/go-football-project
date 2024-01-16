@@ -1,0 +1,6 @@
+insert or ignore into confederation (confederation_name, confederation_description, continent_id) values ('AFC','Asian Football Confederation',(select continent_id from continent where continent_name='Asia'))
+insert or ignore into confederation (confederation_name, confederation_description, continent_id) values ('CAF','Confederation of African Football',(select continent_id from continent where continent_name='Africa'))
+insert or ignore into confederation (confederation_name, confederation_description, continent_id) values ('CONCACAF','Confederation of North, Central American and Caribbean Association Football ',(select continent_id from continent where continent_name='North America'))
+insert or ignore into confederation (confederation_name, confederation_description, continent_id) values ('CONMEBOL','Confederación Sudamericana de Fútbol',(select continent_id from continent where continent_name='South America'))
+insert or ignore into confederation (confederation_name, confederation_description, continent_id) values ('OFC','Oceania Football Confederation',(select continent_id from continent where continent_name='Australia'))
+insert or ignore into confederation (confederation_name, confederation_description, continent_id) values ('UEFA','Union of European Football Associations',(select continent_id from continent where continent_name='Europe'))

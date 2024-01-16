@@ -1,0 +1,4 @@
+CREATE TABLE IF NOT EXISTS continent (
+    continent_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    continent_name TEXT NOT NULL UNIQUE
+)
