@@ -19,6 +19,7 @@ type League struct {
 type Search struct {
 	Country       int64 `json:"country_id"`
 	Confederation int64 `json:"confederation_id"`
+	League        int64 `json:"league_id"`
 }
 
 func (l *League) AddLeague() error {
@@ -43,6 +44,9 @@ func (search *Search) GetLeagues() ([]League, error) {
 	if *search != (Search{}) {
 		query.WriteString(queries.WHERE)
 		switch {
+		case search.League != 0:
+			query.WriteString(queries.LEAGUE_CLAUSE)
+			params = append(params, search.League)
 		case search.Country != 0 && search.Confederation != 0:
 			query.WriteString(queries.COUNTRY_AND_CONFEDERATION_CLAUSE)
 			params = append(params, search.Country, search.Confederation)
@@ -69,7 +73,7 @@ func (search *Search) GetLeagues() ([]League, error) {
 		var league League
 		err := rows.Scan(&league.ID, &league.Name,
 			&league.Country.ID, &league.Country.Name, &league.Country.Continent.ID, &league.Country.Continent.Name,
-			&league.Confederation.ID, &league.Confederation.Name,
+			&league.Confederation.ID, &league.Confederation.Name, &league.Confederation.Description,
 			&league.Confederation.Continent.ID, &league.Confederation.Continent.Name)
 		if err != nil {
 			return nil, err

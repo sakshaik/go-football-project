@@ -4,3 +4,4 @@ city
 confederation
 player
 league
+club
