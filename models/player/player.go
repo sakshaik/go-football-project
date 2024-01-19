@@ -4,6 +4,7 @@ import (
 	"bytes"
 
 	"example.com/football-project/db"
+	"example.com/football-project/models/base"
 	"example.com/football-project/models/global"
 	"example.com/football-project/queries"
 )
@@ -17,19 +18,7 @@ type Player struct {
 }
 
 func (p *Player) AddPlayer() error {
-	query := queries.INSERT_PLAYER
-	stmt, err := db.DB.Prepare(query)
-	if err != nil {
-		return err
-	}
-
-	defer stmt.Close()
-	result, err := stmt.Exec(p.FirstName, p.LastName, p.Age, p.City.ID)
-	if err != nil {
-		return err
-	}
-	_, err = result.LastInsertId()
-	return err
+	return base.InsertData(queries.ADD_PLAYER, base.GenerateParamsInterface(p.FirstName, p.LastName, p.Age, p.City.ID))
 }
 
 func FindPlayerByID(id int64) (*Player, error) {

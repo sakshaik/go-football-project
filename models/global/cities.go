@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"example.com/football-project/db"
+	"example.com/football-project/models/base"
 	"example.com/football-project/queries"
 )
 
@@ -22,7 +23,9 @@ func GetAllCities() ([]City, error) {
 	var data []City
 	for rows.Next() {
 		var city City
-		err := rows.Scan(&city.ID, &city.Name, &city.Country.ID, &city.Country.Name, &city.Country.Continent.ID, &city.Country.Continent.Name)
+		err := rows.Scan(&city.ID, &city.Name,
+			&city.Country.ID, &city.Country.Name,
+			&city.Country.Continent.ID, &city.Country.Continent.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -32,18 +35,7 @@ func GetAllCities() ([]City, error) {
 }
 
 func (c *City) AddCity() error {
-	stmt, err := db.DB.Prepare(queries.ADD_CITY)
-	if err != nil {
-		return err
-	}
-
-	defer stmt.Close()
-	result, err := stmt.Exec(c.Name, c.Country.ID)
-	if err != nil {
-		return err
-	}
-	_, err = result.LastInsertId()
-	return err
+	return base.InsertData(queries.ADD_CITY, base.GenerateParamsInterface(c.Name, c.Country.ID))
 }
 
 func (c *City) ValidateCountry() error {

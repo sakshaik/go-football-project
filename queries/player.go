@@ -1,7 +1,7 @@
 package queries
 
 const (
-	INSERT_PLAYER = `
+	ADD_PLAYER = `
 		INSERT INTO 
 		player (first_name, last_name, age, city_id)
 		VALUES (?,?,?,?)

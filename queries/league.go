@@ -1,7 +1,7 @@
 package queries
 
 const (
-	INSERT_LEAGUE = `
+	ADD_LEAGUE = `
 		insert into league(league_name, country_id, confederation_id)
 		values (?, ?, ?)
 	`

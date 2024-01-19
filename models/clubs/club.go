@@ -2,6 +2,7 @@ package clubs
 
 import (
 	"example.com/football-project/db"
+	"example.com/football-project/models/base"
 	"example.com/football-project/models/leagues"
 	"example.com/football-project/models/player"
 	"example.com/football-project/queries"
@@ -15,7 +16,11 @@ type Club struct {
 }
 
 func (c *Club) AddClub() error {
-	query := queries.INSERT_CLUB
+	return base.InsertData(queries.ADD_CLUB, base.GenerateParamsInterface(c.Name, c.League.ID))
+}
+
+func (c *Club) GetClubDetails() error {
+	query := queries.ADD_CLUB
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
 		return err

@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"example.com/football-project/db"
+	"example.com/football-project/models/base"
 	"example.com/football-project/models/global"
 	"example.com/football-project/queries"
 )
@@ -23,18 +24,7 @@ type Search struct {
 }
 
 func (l *League) AddLeague() error {
-	stmt, err := db.DB.Prepare(queries.INSERT_LEAGUE)
-	if err != nil {
-		return err
-	}
-
-	defer stmt.Close()
-	result, err := stmt.Exec(l.Name, l.Country.ID, l.Confederation.ID)
-	if err != nil {
-		return err
-	}
-	_, err = result.LastInsertId()
-	return err
+	return base.InsertData(queries.ADD_LEAGUE, base.GenerateParamsInterface(l.Name, l.Country.ID, l.Confederation.ID))
 }
 
 func (search *Search) GetLeagues() ([]League, error) {
