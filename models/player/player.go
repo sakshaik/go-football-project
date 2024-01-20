@@ -21,21 +21,20 @@ func (p *Player) AddPlayer() error {
 	return base.InsertData(queries.ADD_PLAYER, base.GenerateParamsInterface(p.FirstName, p.LastName, p.Age, p.City.ID))
 }
 
-func FindPlayerByID(id int64) (*Player, error) {
+func (p *Player) FindPlayerByID() error {
 	var query bytes.Buffer
 	query.WriteString(queries.FIND_PLAYER_BASE_QUERY)
 	query.WriteString(queries.WHERE)
 	query.WriteString(queries.PLAYER_ID_CLAUSE)
-	row := db.DB.QueryRow(query.String(), id)
-	var player Player
-	err := row.Scan(&player.ID, &player.FirstName, &player.LastName, &player.Age,
-		&player.City.ID, &player.City.Name,
-		&player.City.Country.ID, &player.City.Country.Name,
-		&player.City.Country.Continent.ID, &player.City.Country.Continent.Name)
+	row := db.DB.QueryRow(query.String(), p.ID)
+	err := row.Scan(&p.ID, &p.FirstName, &p.LastName, &p.Age,
+		&p.City.ID, &p.City.Name,
+		&p.City.Country.ID, &p.City.Country.Name,
+		&p.City.Country.Continent.ID, &p.City.Country.Continent.Name)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &player, nil
+	return nil
 }
 
 func FindPlayersByID(ids []int64) ([]Player, error) {

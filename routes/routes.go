@@ -18,6 +18,8 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/league", addLeague)
 	server.POST("/search/league", searchLeagues)
 	server.POST("/club", addClub)
+	server.POST("/club/player", addPlayersToClub)
+	server.POST("/search/club", searchClub)
 }
 
 func defaultMessage(context *gin.Context) {

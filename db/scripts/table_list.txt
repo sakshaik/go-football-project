@@ -5,3 +5,4 @@ confederation
 player
 league
 club
+club_player

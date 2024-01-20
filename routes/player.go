@@ -29,10 +29,12 @@ func findPlayerbyID(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Error parsing player id."})
 		return
 	}
-	p, err := player.FindPlayerByID(playerId)
+	var player player.Player
+	player.ID = playerId
+	err = player.FindPlayerByID()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error getting player info by ID"})
 		return
 	}
-	context.JSON(http.StatusOK, p)
+	context.JSON(http.StatusOK, player)
 }
