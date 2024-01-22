@@ -3,7 +3,6 @@ package transfer
 import (
 	"bytes"
 	"errors"
-	"fmt"
 
 	"example.com/football-project/constants"
 	"example.com/football-project/db"
@@ -31,6 +30,11 @@ func (t *Transfer) SubmitTransferRequest() error {
 	return base.InsertData(queries.SUBMIT_TRANSFER_REQUEST,
 		base.GenerateParamsInterface(t.Player.ID, t.From.ID, t.Transfers[0].To.ID,
 			t.Transfers[0].Fee, t.Transfers[0].Currency, constants.SUBMITTED))
+}
+
+func (t *Transfer) RejectTransferRequest() error {
+	return base.UpdateData(queries.REJECT_TRANSFER_REQUEST,
+		base.GenerateParamsInterface(constants.REJECTED, t.Transfers[0].ID))
 }
 
 func FindAllTransferRequests() ([]TransferRequest, error) {
@@ -74,10 +78,10 @@ func FindPlayerTransferRequests(playerId int64) (*Transfer, error) {
 	}
 	transfer.From = currentCLub
 	rows, err := db.DB.Query(query.String(), playerId)
-	defer rows.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	var transferRequests []TransferRequest
 	for rows.Next() {
 		var t TransferRequest
@@ -86,7 +90,6 @@ func FindPlayerTransferRequests(playerId int64) (*Transfer, error) {
 		if err != nil {
 			return nil, err
 		}
-		fmt.Println(t.To.ID)
 		err = t.To.GetClubDetails()
 		if err != nil {
 			return nil, err

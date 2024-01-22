@@ -33,6 +33,22 @@ func submitTransferRequest(context *gin.Context) {
 	context.JSON(http.StatusCreated, gin.H{"message": "Transfer Request submitted successfully."})
 }
 
+func rejectTransferRequest(context *gin.Context) {
+	var transfer transfer.Transfer
+	err := context.ShouldBindJSON(&transfer)
+	if err != nil {
+		context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse sent request."})
+		return
+	}
+	err = transfer.RejectTransferRequest()
+	if err != nil {
+		context.JSON(http.StatusInternalServerError,
+			gin.H{"message": "Error rejecting transfer request", "error": err.Error()})
+		return
+	}
+	context.JSON(http.StatusOK, gin.H{"message": "Transfer Request rejected successfully."})
+}
+
 func findPlayerTransferRequest(context *gin.Context) {
 	playerId, err := strconv.ParseInt(context.Param("playerId"), 10, 64)
 	if err != nil {

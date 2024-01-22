@@ -75,6 +75,7 @@ func (s *Search) GetClubDetails() ([]Club, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	var data []Club
 	for rows.Next() {
 		var club Club
@@ -115,6 +116,7 @@ func (c *Club) GetPlayerExternalRef() error {
 	if err != nil {
 		return err
 	}
+	defer rows.Close()
 	var data []player.Player
 	for rows.Next() {
 		var player player.Player

@@ -50,6 +50,7 @@ func FindPlayersByID(ids []int64) ([]Player, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	var data []Player
 	for rows.Next() {
 		var player Player

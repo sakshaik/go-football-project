@@ -17,6 +17,19 @@ func InsertData(query string, args []interface{}) error {
 	return err
 }
 
+func UpdateData(query string, args []interface{}) error {
+	stmt, err := db.DB.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	_, err = stmt.Exec(args...)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func GenerateParamsInterface(args ...any) []interface{} {
 	if args == nil {
 		return nil
