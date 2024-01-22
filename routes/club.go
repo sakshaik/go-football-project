@@ -45,13 +45,12 @@ func searchClub(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse sent request."})
 		return
 	}
-	var data *clubs.Club
-	if search.IncludePlayers {
+	var data any
+	if search.IncludePlayers && search.Club != 0 {
 		data, err = search.GetClubAndPlayerDetails()
 	} else {
 		data, err = search.GetClubDetails()
 	}
-
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return

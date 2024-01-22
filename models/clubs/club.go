@@ -24,6 +24,7 @@ type PlayerExtRef struct {
 
 type Search struct {
 	Club           int64 `json:"club_id"`
+	League         int64 `json:"league_id"`
 	IncludePlayers bool  `json:"include_players"`
 }
 
@@ -41,29 +42,61 @@ func (p *PlayerExtRef) AddPlayerToClub() error {
 	return nil
 }
 
-func (s *Search) GetClubDetails() (*Club, error) {
+func (club *Club) GetClubDetails() error {
 	var query bytes.Buffer
 	query.WriteString(queries.FIND_CLUB_BASE_QUERY)
 	query.WriteString(queries.WHERE)
 	query.WriteString(queries.CLUB_ID_CLAUSE)
-	row := db.DB.QueryRow(query.String(), s.Club)
-	var club Club
+	row := db.DB.QueryRow(query.String(), club.ID)
 	err := row.Scan(&club.ID, &club.Name, &club.League.ID, &club.League.Name,
 		&club.League.Country.ID, &club.League.Country.Name,
 		&club.League.Country.Continent.ID, &club.League.Country.Continent.Name,
 		&club.League.Confederation.ID, &club.League.Confederation.Name, &club.League.Confederation.Description,
 		&club.League.Confederation.Continent.ID, &club.League.Confederation.Continent.Name)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &club, nil
+	return nil
 }
 
-func (s *Search) GetClubAndPlayerDetails() (*Club, error) {
-	club, err := s.GetClubDetails()
+func (s *Search) GetClubDetails() ([]Club, error) {
+	var query bytes.Buffer
+	query.WriteString(queries.FIND_CLUB_BASE_QUERY)
+	query.WriteString(queries.WHERE)
+	var args []interface{}
+	if s.Club != 0 {
+		args = append(args, s.Club)
+		query.WriteString(queries.CLUB_ID_CLAUSE)
+	} else if s.League != 0 {
+		args = append(args, s.League)
+		query.WriteString(queries.LEAGUE_ID_CLAUSE)
+	}
+	rows, err := db.DB.Query(query.String(), args...)
 	if err != nil {
 		return nil, err
 	}
+	var data []Club
+	for rows.Next() {
+		var club Club
+		err := rows.Scan(&club.ID, &club.Name, &club.League.ID, &club.League.Name,
+			&club.League.Country.ID, &club.League.Country.Name,
+			&club.League.Country.Continent.ID, &club.League.Country.Continent.Name,
+			&club.League.Confederation.ID, &club.League.Confederation.Name, &club.League.Confederation.Description,
+			&club.League.Confederation.Continent.ID, &club.League.Confederation.Continent.Name)
+		if err != nil {
+			return nil, err
+		}
+		data = append(data, club)
+	}
+	return data, nil
+}
+
+func (s *Search) GetClubAndPlayerDetails() (*Club, error) {
+	clubs, err := s.GetClubDetails()
+	if err != nil {
+		return nil, err
+	}
+	club := &clubs[0]
 	err = club.GetPlayerExternalRef()
 	if err != nil {
 		return nil, err
@@ -93,4 +126,18 @@ func (c *Club) GetPlayerExternalRef() error {
 	}
 	c.Players = data
 	return nil
+}
+
+func GetClubDetailsByPlayerId(playerId int64) (Club, error) {
+	row := db.DB.QueryRow(queries.FIND_CLUB_BY_PLAYER_ID, playerId)
+	var club Club
+	err := row.Scan(&club.ID, &club.Name, &club.League.ID, &club.League.Name,
+		&club.League.Country.ID, &club.League.Country.Name,
+		&club.League.Country.Continent.ID, &club.League.Country.Continent.Name,
+		&club.League.Confederation.ID, &club.League.Confederation.Name, &club.League.Confederation.Description,
+		&club.League.Confederation.Continent.ID, &club.League.Confederation.Continent.Name)
+	if err != nil {
+		return Club{}, err
+	}
+	return club, err
 }

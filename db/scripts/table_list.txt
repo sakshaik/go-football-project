@@ -6,3 +6,4 @@ player
 league
 club
 club_player
+transfer

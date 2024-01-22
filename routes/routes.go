@@ -20,6 +20,9 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/club", addClub)
 	server.POST("/club/player", addPlayersToClub)
 	server.POST("/search/club", searchClub)
+	server.POST("/transfer/submit", submitTransferRequest)
+	server.GET("/transfer/player/:playerId", findPlayerTransferRequest)
+	server.GET("/transfer/all", findAllTransfers)
 }
 
 func defaultMessage(context *gin.Context) {
