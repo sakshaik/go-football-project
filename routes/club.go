@@ -29,7 +29,7 @@ func addPlayersToClub(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "Unable to parse sent request."})
 		return
 	}
-	err = ref.AddPlayerToClub()
+	err = ref.AddPlayersToClub()
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error adding a new player to club"})
 		return

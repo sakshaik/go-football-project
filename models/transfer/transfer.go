@@ -32,9 +32,14 @@ func (t *Transfer) SubmitTransferRequest() error {
 			t.Transfers[0].Fee, t.Transfers[0].Currency, constants.SUBMITTED))
 }
 
-func (t *Transfer) RejectTransferRequest() error {
-	return base.UpdateData(queries.REJECT_TRANSFER_REQUEST,
-		base.GenerateParamsInterface(constants.REJECTED, t.Transfers[0].ID))
+func (t *TransferRequest) RejectTransferRequest() error {
+	return base.UpdateOrDeleteData(queries.UPDATE_TRANSFER_REQUEST_STATUS,
+		base.GenerateParamsInterface(constants.REJECTED, t.ID))
+}
+
+func (t *TransferRequest) ApproveTransferRequest() error {
+	return base.UpdateOrDeleteData(queries.UPDATE_TRANSFER_REQUEST_STATUS,
+		base.GenerateParamsInterface(constants.APPROVED, t.ID))
 }
 
 func FindAllTransferRequests() ([]TransferRequest, error) {
@@ -77,7 +82,7 @@ func FindPlayerTransferRequests(playerId int64) (*Transfer, error) {
 		return nil, err
 	}
 	transfer.From = currentCLub
-	rows, err := db.DB.Query(query.String(), playerId)
+	rows, err := db.DB.Query(query.String(), playerId, transfer.From.ID)
 	if err != nil {
 		return nil, err
 	}

@@ -22,6 +22,7 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/search/club", searchClub)
 	server.POST("/transfer/submit", submitTransferRequest)
 	server.PUT("/transfer/reject", rejectTransferRequest)
+	server.PUT("/transfer/approve", approveTransferRequest)
 	server.GET("/transfer/player/:playerId", findPlayerTransferRequest)
 	server.GET("/transfer/all", findAllTransfers)
 }

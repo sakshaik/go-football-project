@@ -17,7 +17,7 @@ func InsertData(query string, args []interface{}) error {
 	return err
 }
 
-func UpdateData(query string, args []interface{}) error {
+func UpdateOrDeleteData(query string, args []interface{}) error {
 	stmt, err := db.DB.Prepare(query)
 	if err != nil {
 		return err

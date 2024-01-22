@@ -11,6 +11,10 @@ const (
 		player_ext_ref (player_id, club_id)
 		VALUES (?,?)
 	`
+	REMOVE_PLAYER_FROM_CLUB = `
+		delete from player_ext_ref where player_id = ? and club_id = ?
+	`
+
 	FIND_CLUB_BASE_QUERY = `
 		select cl.club_id, cl.club_name,
 			l.league_id, l.league_name,

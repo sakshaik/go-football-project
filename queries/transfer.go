@@ -6,7 +6,7 @@ const (
 		transfer_player (player_id, from_club_id, to_club_id, fee, currency_code, status)
 		VALUES (?,?, ?, ?, ?, ?)
 	`
-	REJECT_TRANSFER_REQUEST = `
+	UPDATE_TRANSFER_REQUEST_STATUS = `
 		UPDATE transfer_player 
 		SET status = ?
 		where transfer_id = ?
@@ -16,6 +16,6 @@ const (
 			from transfer_player tp
 	`
 	PLAYER_TRANSFER_PLAYER_ID_CLAUSE = `
-		tp.player_id = ?
+		tp.player_id = ? and tp.from_club_id = ?
 	`
 )

@@ -32,12 +32,28 @@ func (c *Club) AddClub() error {
 	return base.InsertData(queries.ADD_CLUB, base.GenerateParamsInterface(c.Name, c.League.ID))
 }
 
-func (p *PlayerExtRef) AddPlayerToClub() error {
+func (p *PlayerExtRef) AddPlayersToClub() error {
 	for _, player := range p.Players {
-		err := base.InsertData(queries.ADD_PLAYER_TO_CLUB, base.GenerateParamsInterface(player.ID, p.Club.ID))
+		err := AddPlayerToClub(player.ID, p.Club.ID)
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func AddPlayerToClub(playerId, clubId int64) error {
+	err := base.InsertData(queries.ADD_PLAYER_TO_CLUB, base.GenerateParamsInterface(playerId, clubId))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func RemovePlayerFromClub(playerId, clubId int64) error {
+	err := base.UpdateOrDeleteData(queries.REMOVE_PLAYER_FROM_CLUB, base.GenerateParamsInterface(playerId, clubId))
+	if err != nil {
+		return err
 	}
 	return nil
 }
