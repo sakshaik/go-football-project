@@ -2,3 +2,4 @@ continent
 country
 city
 confederation
+position

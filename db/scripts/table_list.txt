@@ -2,6 +2,7 @@ continent
 country
 city
 confederation
+position
 player
 league
 club

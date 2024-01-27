@@ -42,25 +42,6 @@ func (t *TransferRequest) ApproveTransferRequest() error {
 		base.GenerateParamsInterface(constants.APPROVED, t.ID))
 }
 
-func FindAllTransferRequests() ([]TransferRequest, error) {
-	query := `select transfer_id,to_club_id, fee, currency_code, status from transfer_player`
-	rows, err := db.DB.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var data []TransferRequest
-	for rows.Next() {
-		var t TransferRequest
-		err := rows.Scan(&t.ID, &t.To.ID, &t.Fee, &t.Currency, &t.Status)
-		if err != nil {
-			return nil, err
-		}
-		data = append(data, t)
-	}
-	return data, nil
-}
-
 func FindPlayerTransferRequests(playerId int64) (*Transfer, error) {
 	var query bytes.Buffer
 	query.WriteString(queries.PLAYER_TRANSFER_REQUEST_BASE_QUERY)

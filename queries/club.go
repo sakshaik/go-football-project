@@ -14,7 +14,9 @@ const (
 	REMOVE_PLAYER_FROM_CLUB = `
 		delete from player_ext_ref where player_id = ? and club_id = ?
 	`
-
+	REMOVE_PLAYER_REFERENCE = `
+		delete from player_ext_ref where player_id = ?
+	`
 	FIND_CLUB_BASE_QUERY = `
 		select cl.club_id, cl.club_name,
 			l.league_id, l.league_name,
@@ -38,6 +40,9 @@ const (
 	FIND_PLAYER_REFERENCE_BY_CLUB_ID = `
 		select player_id from player_ext_ref
 		where club_id = ?
+	`
+	FIND_ALL_PLAYER_REFERENCE = `
+		select player_id, club_id from player_ext_ref
 	`
 	FIND_CLUB_BY_PLAYER_ID = `
 		select cl.club_id, cl.club_name,

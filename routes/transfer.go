@@ -114,13 +114,3 @@ func findPlayerTransferRequest(context *gin.Context) {
 	}
 	context.JSON(http.StatusOK, data)
 }
-
-func findAllTransfers(context *gin.Context) {
-	data, err := transfer.FindAllTransferRequests()
-	if err != nil {
-		context.JSON(http.StatusInternalServerError,
-			gin.H{"message": "Error retrieving transfer requests", "error": err.Error()})
-		return
-	}
-	context.JSON(http.StatusOK, data)
-}

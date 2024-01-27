@@ -8,23 +8,28 @@ import (
 
 func RegisterRoutes(server *gin.Engine) {
 	server.GET("/", defaultMessage)
-	server.GET("/continents", getAllContinents)
-	server.GET("/countries", getAllCountries)
-	server.GET("/cities", getAllCities)
-	server.GET("/confederations", getAllConfederations)
-	server.POST("/city", addCity)
+	global := server.Group("/global")
+	global.GET("/continents", getAllContinents)
+	global.GET("/countries", getAllCountries)
+	global.GET("/cities", getAllCities)
+	global.GET("/confederations", getAllConfederations)
+	global.POST("/city", addCity)
+
+	server.GET("/player/positions", getAllPositions)
 	server.POST("/player", addPlayer)
-	server.GET("/player/:playerId", findPlayerbyID)
+	server.GET("/player", findPlayer)
+	server.DELETE("/player/:playerId", deletePlayer)
+
 	server.POST("/league", addLeague)
 	server.POST("/search/league", searchLeagues)
 	server.POST("/club", addClub)
 	server.POST("/club/player", addPlayersToClub)
 	server.POST("/search/club", searchClub)
+
 	server.POST("/transfer/submit", submitTransferRequest)
 	server.PUT("/transfer/reject", rejectTransferRequest)
 	server.PUT("/transfer/approve", approveTransferRequest)
 	server.GET("/transfer/player/:playerId", findPlayerTransferRequest)
-	server.GET("/transfer/all", findAllTransfers)
 }
 
 func defaultMessage(context *gin.Context) {

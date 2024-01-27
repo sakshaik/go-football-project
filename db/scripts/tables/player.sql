@@ -4,5 +4,7 @@ CREATE TABLE IF NOT EXISTS player (
     last_name TEXT NOT NULL,
     age INTEGER NOT NULL,
     city_id INTEGER NOT NULL,
-    FOREIGN KEY(city_id) REFERENCES city(city_id)
+    position_id INTEGER NOT NULL,
+    FOREIGN KEY(city_id) REFERENCES city(city_id),
+    FOREIGN KEY(position_id) REFERENCES position(position_id)
 )

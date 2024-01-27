@@ -2,6 +2,7 @@ package queries
 
 const (
 	WHERE = " where "
+	AND   = " and "
 
 	GET_ALL_CITIES = `
 		select 

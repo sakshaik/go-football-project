@@ -22,6 +22,11 @@ type PlayerExtRef struct {
 	Players []player.Player `json:"players"`
 }
 
+type PlayerExtRefData struct {
+	Club   int64 `json:"club_id"`
+	Player int64 `json:"player_id"`
+}
+
 type Search struct {
 	Club           int64 `json:"club_id"`
 	League         int64 `json:"league_id"`
@@ -52,6 +57,14 @@ func AddPlayerToClub(playerId, clubId int64) error {
 
 func RemovePlayerFromClub(playerId, clubId int64) error {
 	err := base.UpdateOrDeleteData(queries.REMOVE_PLAYER_FROM_CLUB, base.GenerateParamsInterface(playerId, clubId))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func RemovePlayerReference(playerId int64) error {
+	err := base.UpdateOrDeleteData(queries.REMOVE_PLAYER_REFERENCE, base.GenerateParamsInterface(playerId))
 	if err != nil {
 		return err
 	}
