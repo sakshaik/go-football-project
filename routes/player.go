@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -12,6 +13,7 @@ import (
 func getAllPositions(context *gin.Context) {
 	positions, err := player.GetAllPositions()
 	if err != nil {
+		fmt.Println(err)
 		context.JSON(http.StatusInternalServerError, gin.H{"message": "Error Fetching Positions."})
 		return
 	}
